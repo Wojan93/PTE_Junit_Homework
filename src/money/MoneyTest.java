@@ -11,16 +11,17 @@ public class MoneyTest {
     private Money m1;
     private Money m2;
 
-    private String currency = "CHF";
+    private Currency currency1 = Currency.EUR;
+    private Currency currency2 = Currency.EUR;
     private int value1 = 12;
     private int value2 = 14;
-    private int sumValue = value1 + value2;
+  
 
     @BeforeEach
     public void setUp() throws Exception {
 
-        m1 = new Money(value1, currency);
-        m2 = new Money(value2, currency);
+        m1 = new Money(value1, currency1);
+        m2 = new Money(value2, currency2);
     }
 
     @AfterEach
@@ -29,9 +30,9 @@ public class MoneyTest {
 
     @Test
     public void whenAddedConcreteValueMoney_thenSumValueMoney() {
-        Money expected = new Money(value1 + value2, currency);
-        Money result = m1.add(m2); //
-        assertEquals(expected, result); //
+        Money expected = new Money(value1 + value2, currency1);
+        Money result = m1.add(m2); 
+        assertEquals(expected, result); 
     }
 
     @Test
@@ -41,7 +42,7 @@ public class MoneyTest {
 
     @Test
     public void moneyEqualsItself_() {
-        assertEquals(m1, new Money(value1, currency));
+        assertEquals(m1, new Money(value1, currency1));
         assertEquals(m1, m1);
         assertNotEquals(m1, m2);
         assertNotEquals(m1, Integer.parseInt("1"));
@@ -49,12 +50,12 @@ public class MoneyTest {
 
     @Test
     public void whenZeroValue_thenZeroAmount() {
-        assertEquals(new Money(0, currency).amount(), 0);
+        assertEquals(new Money(0, currency1).amount(), 0);
     }
 
     @Test
     public void whenNativeValue_thenNegativeAmount() {
-        assertEquals(new Money(-10, currency).amount(), -10);
+        assertEquals(new Money(-10, currency1).amount(), -10);
     }
 
     // zadanie A.1
@@ -63,7 +64,7 @@ public class MoneyTest {
     public void whenMultipleValue_thenMultipleResult() {
         int multiplier = 7;
         int multipliedValue = multiplier * value1;
-        int resultValue = new Money(multipliedValue, currency).amount();
+        int resultValue = new Money(multipliedValue, currency1).amount();
         assertEquals(multipliedValue, resultValue);
     }
 
@@ -71,7 +72,7 @@ public class MoneyTest {
     public void whenMultipleZero_thenZeroResult() {
         int multiplier = 0;
         int multipliedValue = multiplier * value1;
-        int resultValue = new Money(multipliedValue, currency).amount();
+        int resultValue = new Money(multipliedValue, currency1).amount();
         assertEquals(multipliedValue, resultValue);
     }
 
@@ -79,7 +80,7 @@ public class MoneyTest {
     public void whenMultipleNagative_thenExpectedResult() {
         int multiplier = -10;
         int multipliedValue = multiplier * value1;
-        int resultValue = new Money(multipliedValue, currency).amount();
+        int resultValue = new Money(multipliedValue, currency1).amount();
         assertEquals(multipliedValue, resultValue);
     }
 
@@ -88,36 +89,36 @@ public class MoneyTest {
     @Test
     public void whenCompareConcretePlnAndUsd_thenExpectedResult() {
 
-        Money mPLN = new Money(38, PLN.name());
-        Money mUSD = new Money(10, USD.name());
-        Money fromUSD = Exchange.exchanged(mUSD, PLN.name());
+        Money mPLN = new Money(38, PLN);
+        Money mUSD = new Money(10, USD);
+        Money fromUSD = Exchange.exchanged(mUSD, PLN);
         assertEquals(mPLN, fromUSD);
     }
 
     @Test
     public void whenCompareZeroPlnAndUsd_thenZeroResult() {
 
-        Money mPLN = new Money(0, PLN.name());
-        Money mUSD = new Money(0, USD.name());
-        Money fromUSD = Exchange.exchanged(mUSD, PLN.name());
+        Money mPLN = new Money(0, PLN);
+        Money mUSD = new Money(0, USD);
+        Money fromUSD = Exchange.exchanged(mUSD, PLN);
         assertEquals(mPLN, fromUSD);
     }
 
     @Test
     public void whenCompareConcretePlnAndEur_thenExpectedResult() {
 
-        Money mPLN = new Money(427, PLN.name());
-        Money mEUR = new Money(100, EUR.name());
-        Money fromEur = Exchange.exchanged(mEUR, PLN.name());
+        Money mPLN = new Money(427, PLN);
+        Money mEUR = new Money(100, EUR);
+        Money fromEur = Exchange.exchanged(mEUR, PLN);
         assertEquals(mPLN, fromEur);
     }
 
     @Test
     public void whenCompare100CnyTo10Eur_thenGreater() {
 
-        Money mCNY = new Money(100, CNY.name());
-        Money mEUR = new Money(10, EUR.name());
-        Money fromCNY = Exchange.exchanged(mCNY, EUR.name());
+        Money mCNY = new Money(100, CNY);
+        Money mEUR = new Money(10, EUR);
+        Money fromCNY = Exchange.exchanged(mCNY, EUR);
 
         assertTrue(fromCNY.getAmount() > mEUR.getAmount() );
     }
@@ -128,10 +129,10 @@ public class MoneyTest {
     @Test
     public void whenAddConcretePlnAndUsd_thenExpectedResult() {
 
-        Money mPLN = new Money(38, PLN.name());
-        Money mUSD = new Money(10, USD.name());
+        Money mPLN = new Money(38, PLN);
+        Money mUSD = new Money(10, USD);
 
-        Money zeroPLN = new Money(0, PLN.name());
+        Money zeroPLN = new Money(0, PLN);
 
         assertEquals(zeroPLN.add(mUSD), mPLN);
     }
@@ -139,11 +140,11 @@ public class MoneyTest {
     @Test
     public void whenAdd100UsdTo0Eur_then88EuroResult() {
 
-        Money mEUR = new Money(0, EUR.name());
-        Money mUSD = new Money(100, USD.name());
+        Money mEUR = new Money(0, EUR);
+        Money mUSD = new Money(100, USD);
 
         Money mResult = mEUR.add(mUSD);
-        Money mExpected = new Money (88, EUR.name());
+        Money mExpected = new Money (88, EUR);
 
         assertEquals(mResult, mExpected);
     }
@@ -151,11 +152,11 @@ public class MoneyTest {
     @Test
     public void whenAdd100UsdTo10Eur_then98EuroResult() {
 
-        Money mEUR = new Money(10, EUR.name());
-        Money mUSD = new Money(100, USD.name());
+        Money mEUR = new Money(10, EUR);
+        Money mUSD = new Money(100, USD);
 
         Money mResult = mEUR.add(mUSD);
-        Money mExpected = new Money (98, EUR.name());
+        Money mExpected = new Money (98, EUR);
 
         assertEquals(mResult, mExpected);
     }
@@ -163,11 +164,11 @@ public class MoneyTest {
     @Test
     public void whenAdd100CnyTo1Usd_then15UsdResult() {
 
-        Money m1 = new Money(1, USD.name());
-        Money m2 = new Money(100, CNY.name());
+        Money m1 = new Money(1, USD);
+        Money m2 = new Money(100, CNY);
 
         Money mResult = m1.add(m2);
-        Money mExpected = new Money (15, USD.name());
+        Money mExpected = new Money (15, USD);
 
         assertEquals(mResult, mExpected);
     }

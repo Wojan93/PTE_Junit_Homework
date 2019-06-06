@@ -39,16 +39,13 @@ public class ManagerJTest {
 	{
 		assertTrue(mng1.getName() == "Manager1");
 		assertTrue(ee1.getName() == "Employee1");
-		
 	}
 	
 	@Test
 	public void testGetHireDate()
 	{
-
 		assertTrue(mng1.getHireDay().equals( new GregorianCalendar(2015, 11, 11).getTime()));
 		assertTrue(ee1.getHireDay().equals( new GregorianCalendar(2012, 1, 15).getTime()));
-		
 	}
 	
 	

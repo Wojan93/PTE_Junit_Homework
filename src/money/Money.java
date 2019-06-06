@@ -1,48 +1,47 @@
-package money; 
+package money;
+
 class Money {
-    private int fAmount;
-    private String fCurrency;
+	private int fAmount;
+	private Currency fCurrency;
 
-    public Money(int amount, String currency) {
-        fAmount = amount;
-        fCurrency = currency;
-    }
+	public Money(int amount, Currency cur) {
+		fAmount = amount;
+		fCurrency = cur;
+	}
 
-    public int amount() {
-        return fAmount;
-    }
+	public int amount() {
+		return fAmount;
+	}
 
-    public String currency() {
-        return fCurrency;
-    }
+	public Currency currency() {
+		return fCurrency;
+	}
 
-    public Money add(Money m) {
-        Money newMoney = Exchange.exchanged(m, fCurrency);
-        newMoney.setAmount(newMoney.getAmount() + fAmount);
-        return newMoney;
-    }
+	public Money add(Money m) {
+		Money newMoney = Exchange.exchanged(m, fCurrency);
+		newMoney.setAmount(newMoney.getAmount() + fAmount);
+		return newMoney;
+	}
 
+	@Override
+	public boolean equals(Object anObject) {
+		if (anObject instanceof Money) {
+			Money a = (Money) anObject;
+			return a.currency().equals(currency()) && amount() == a.amount();
+		} else
+			return false;
 
+	}
 
+	public int getAmount() {
+		return fAmount;
+	}
 
-    @Override
-    public boolean equals(Object anObject) {
-        if (anObject instanceof Money) {
-            Money a = (Money) anObject;
-            return a.currency().equals(currency()) && amount() == a.amount();
-        }
-        return false;
-    }
+	public void setAmount(int Amount) {
+		this.fAmount = Amount;
+	}
 
-    public int getAmount() {
-        return fAmount;
-    }
-
-    public void setAmount(int Amount) {
-        this.fAmount = Amount;
-    }
-
-    public String getCurrency() {
-        return fCurrency;
-    }
+	public Currency getCurrency() {
+		return fCurrency;
+	}
 }
