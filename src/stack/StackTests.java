@@ -1,6 +1,7 @@
 package stack;
 
 import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.BufferOverflowException;
 import java.util.EmptyStackException;
@@ -17,95 +18,123 @@ public class StackTests {
 	}
 
 	@Test
-	public void afterPushStackIsNoLongerEmpty() {
+	public void afterPushStackNoEmpty() {
 		Stack s = new Stack();
-
 		s.push(1);
-
 		assertFalse(s.isEmpty());
 	}
 
 	@Test
-	public void afterPushAndPopStackIsEmptyAgain() {
+	public void afterPushAndPopStackEmpty() {
 		Stack s = new Stack();
-
 		s.push(1);
 		s.pop();
-
 		assertTrue(s.isEmpty());
 	}
 
-	@Test(expected = EmptyStackException.class)
+	@Test
 	public void emptyStackThrowsOnPop() {
 		Stack s = new Stack();
+		assertThrows(EmptyStackException.class, () -> s.pop());
 
-		s.pop();
 	}
 
 	@Test
 	public void popReturnsWhatWasPushed() {
 		Stack s = new Stack();
-
-		s.push(1234);
-
-		assertEquals(1234, s.pop());
+		s.push(67);
+		assertEquals(67, s.pop());
 	}
 
 	@Test
-	public void stackDoesNotBecomeEmptyWhenThereWasLessPopThanPush() {
+	public void stackNotEmptyWhenLessPopThanPush() {
 		Stack s = new Stack();
-
-		s.push(1);
-		s.push(2);
+		s.push(67);
+		s.push(6);
 		s.pop();
-
 		assertFalse(s.isEmpty());
 	}
 
 	@Test
-	public void lastPopReturnsFirstPushedValue() {
+	public void lastPopReturnsFirstPushValue() {
 		Stack s = new Stack();
-
-		s.push(1);
-		s.push(2);
+		s.push(67);
+		s.push(6);
 		s.pop();
-
-		assertEquals(1, s.pop());
+		assertEquals(67, s.pop());
 	}
 
-	@Test(expected = BufferOverflowException.class)
-	public void stackThrowsWhenTryingToPushMoreThanMaximumCapacity() {
+	@Test
+	public void stackOverflowExceptionWhenCapacityExceeded() {
 		Stack s = new Stack();
 
-		for (int i = 0; i < s.MAXIMUM_CAPACITY + 1; ++i)
-			s.push(i);
+		assertThrows(BufferOverflowException.class, () -> {
+			for (int i = 0; i < s.capacity + 1; ++i)
+				s.push(i);
+		});
 	}
-	
-	// TODO configurable Stack capacity
-	@Test
-	public void stackHasConfigurableCapacity(){
-		Stack s = new Stack(15);
-		assertEquals(s.MAXIMUM_CAPACITY, 15);
-	}
-	// TODO Stack.clear()
-	@Test
-	public void stackClearMethod(){
-		Stack s = new Stack();
 
-		s.push(1);
-		s.push(2);
+	@Test
+	public void afterClearStackIsEmpty() {
+		Stack s = new Stack();
+		s.push(67);
+		s.push(6);
 		s.clear();
 		assertTrue(s.isEmpty());
-		
 	}
-	
-	// TODO Stack.getSize()
+
 	@Test
-	public void stackGetSizeReturnsSize(){
+	public void afterFourPushSizeEqualFour() {
 		Stack s = new Stack();
-		assertEquals(s.getSize(), 0);
 		s.push(1);
 		s.push(2);
+		s.push(3);
+		s.push(4);
+		assertEquals(s.getSize(), 4);
+	}
+	
+	@Test
+	public void afterSetCapacityCapacityEqualTwo() {
+		Stack s = new Stack();
+		s.push(1);
+		s.push(2);
+		s.push(3);
+		s.setCapacity(2);
 		assertEquals(s.getSize(), 2);
+	}
+	
+	@Test
+	public void afterSetCapacityCapacityEqualFifteen() {
+		Stack s = new Stack();
+		s.push(1);
+		s.push(2);
+		s.push(3);
+		s.setCapacity(15);
+		assertEquals(s.getSize(), 15);
+	}
+	@Test
+	public void afterSetCapacityCapacityEqualFour() {
+		Stack s = new Stack();
+		s.push(1);
+		s.push(2);
+		s.push(3);
+		s.push(3);
+		s.setCapacity(4);
+		assertEquals(s.getSize(), 4);
+	}
+	
+	@Test
+	public void isFullCheck() {
+		Stack s = new Stack();
+		s.push(1);
+	assertFalse(s.isFull());
+	}
+	
+	@Test
+	public void afterMakeStackFull() {
+		Stack s = new Stack();
+		s.makeStackFull();
+		assertTrue(s.isFull());
+		
 	}
 }

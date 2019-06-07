@@ -24,8 +24,9 @@ public class ManagerJTest {
 	
 	@Test
 	public void testGetSalary(){
+		
 		assertTrue(mng1.getSalary() == 35 );
-				
+		assertTrue(ee1.getSalary() == 15 );		
 	}
 	
 	@Test

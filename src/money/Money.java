@@ -18,7 +18,7 @@ class Money {
 	}
 
 	public Money add(Money m) {
-		Money newMoney = Exchange.exchanged(m, fCurrency);
+		Money newMoney = Exchange.stock(m, fCurrency);
 		newMoney.setAmount(newMoney.getAmount() + fAmount);
 		return newMoney;
 	}
@@ -33,6 +33,9 @@ class Money {
 
 	}
 
+
+	
+	
 	public int getAmount() {
 		return fAmount;
 	}
